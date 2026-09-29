@@ -133,3 +133,33 @@ footer{padding:32px 0;color:#7f7f84;font-size:12px;border-top:1px solid var(--li
   .doc-meta p{font-size:11px;line-height:1.45}
   .doc-slide iframe{height:68vh;min-height:520px}
 }
+
+
+/* ===== Apresentação horizontal dos guias ===== */
+.doc-presentation{margin-top:30px}
+.doc-panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 18px 45px rgba(0,0,0,.28)}
+.doc-panel.is-active{display:block}
+.doc-meta{padding:22px 24px 18px}
+.doc-meta h3{margin:6px 0;font-size:24px}
+.doc-meta p{margin:0 0 14px;color:var(--muted);font-size:13px}
+.doc-open{font-size:12px;padding:9px 12px}
+.doc-viewer{position:relative;background:#080808;overflow:hidden}
+.slide-track{display:flex;will-change:transform;touch-action:pan-y;transition:transform .28s ease}
+.doc-slide-page{flex:0 0 100%;width:100%;display:block;aspect-ratio:842/595;object-fit:contain;background:#fff;user-select:none;-webkit-user-drag:none}
+.slide-btn{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:58px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:rgba(9,9,10,.76);backdrop-filter:blur(8px);color:#fff;font-size:34px;line-height:1;cursor:pointer;z-index:3}
+.slide-btn:hover{border-color:var(--gold);color:var(--gold)}
+.slide-prev{left:12px}.slide-next{right:12px}
+.slide-counter{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.72);color:#fff;font-size:11px;letter-spacing:.08em;z-index:3}
+.doc-switcher{display:flex;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.doc-switch{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.12em;cursor:pointer}
+.doc-switch.is-active{border-color:var(--red);color:#fff;background:rgba(215,25,43,.12)}
+@media(max-width:650px){
+ .doc-presentation{margin-top:22px}
+ .doc-meta{padding:17px 16px 14px}
+ .doc-meta h3{font-size:19px}
+ .doc-meta p{font-size:11px;line-height:1.45}
+ .doc-open{font-size:11px}
+ .slide-btn{width:34px;height:46px;font-size:25px}
+ .slide-prev{left:7px}.slide-next{right:7px}
+ .slide-counter{bottom:8px;font-size:10px;padding:5px 9px}
+}
