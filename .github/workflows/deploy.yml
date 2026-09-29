@@ -25,28 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Generate horizontal presentation pages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y poppler-utils
-          rm -rf assets/linade-slides assets/w2c-slides
-          mkdir -p assets/linade-slides assets/w2c-slides
-          pdftoppm -jpeg -r 110 -jpegopt quality=82 assets/Linade_2026_Guia_Tecnico_do_Instrutor.pdf assets/linade-slides/page
-          pdftoppm -jpeg -r 110 -jpegopt quality=82 assets/W2C_Games_Guia_de_Aplicacao_para_Instrutores.pdf assets/w2c-slides/page
-          i=1
-          for f in assets/linade-slides/page-*.jpg; do
-            n=$(printf '%02d' "$i")
-            if [ "$f" != "assets/linade-slides/page-$n.jpg" ]; then mv "$f" "assets/linade-slides/page-$n.jpg"; fi
-            i=$((i+1))
-          done
-          i=1
-          for f in assets/w2c-slides/page-*.jpg; do
-            n=$(printf '%02d' "$i")
-            if [ "$f" != "assets/w2c-slides/page-$n.jpg" ]; then mv "$f" "assets/w2c-slides/page-$n.jpg"; fi
-            i=$((i+1))
-          done
-          find assets/linade-slides assets/w2c-slides -type f -name '*.jpg' -print
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
