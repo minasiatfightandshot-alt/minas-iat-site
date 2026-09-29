@@ -21,7 +21,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
       img.alt = (key==='linade'?'LINADE 2026':'W2C Games 2026') + ' — página ' + i;
       img.loading = i <= 2 ? 'eager' : 'lazy';
       img.draggable = false;
-      img.src = base + meta.folder + '/page-' + String(i).padStart(2,'0') + '.webp';
+      img.src = base + meta.folder + '/page-' + String(i).padStart(2,'0') + '.jpg';
       track.appendChild(img);
     }
     render(key);
