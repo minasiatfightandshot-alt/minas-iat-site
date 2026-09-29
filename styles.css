@@ -73,3 +73,16 @@ footer{padding:32px 0;color:#7f7f84;font-size:12px;border-top:1px solid var(--li
   .credential{grid-template-columns:1fr 1fr}
   .certificate-grid{grid-template-columns:1fr 1fr}
 }
+
+
+/* ===== Resultados competitivos ===== */
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.result-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;position:relative}
+.result-place{display:block;color:var(--red);font-size:38px;font-weight:900;line-height:1;margin-bottom:12px}
+.result-card h3{margin:0 0 10px;font-size:20px}
+.result-card p{color:var(--muted);margin:0 0 10px;font-size:14px}
+.result-card small{color:#85858a;font-size:11px;line-height:1.5}
+.contact a{color:var(--text);text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:3px}
+.contact a:hover{color:var(--gold)}
+@media(max-width:900px){.results-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.results-grid{grid-template-columns:1fr;gap:14px}.result-card{padding:20px}.result-place{font-size:34px}}
