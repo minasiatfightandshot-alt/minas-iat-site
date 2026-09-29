@@ -38,8 +38,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
     const ratio=window.devicePixelRatio||1;
     canvas.width=Math.floor(viewport.width*ratio);
     canvas.height=Math.floor(viewport.height*ratio);
-    canvas.style.width=viewport.width+'px';
-    canvas.style.height=viewport.height+'px';
+    canvas.style.width='100%';
+    canvas.style.height='auto';
     wrap.style.aspectRatio=base.width+'/'+base.height;
     const ctx=canvas.getContext('2d');
     await page.render({canvasContext:ctx,viewport,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;
