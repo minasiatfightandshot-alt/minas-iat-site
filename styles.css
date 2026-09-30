@@ -21,3 +21,22 @@ section{padding:78px 0;border-top:1px solid var(--line)}h2{font-size:clamp(30px,
 footer{padding:32px 0;color:#777;font-size:12px;border-top:1px solid var(--line)}footer span{color:#aaa}
 @media(max-width:900px){.desktop-nav{display:none}.menu-toggle{display:block}.hero-grid,.split{grid-template-columns:1fr}.hero-photo{height:480px}.grid{grid-template-columns:1fr 1fr}.feature-grid{grid-template-columns:1fr 1fr}.results-grid{grid-template-columns:1fr 1fr}.contact-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.wrap{width:100%;padding:0 18px}.hero-home{min-height:auto;padding:60px 0 35px}.hero h1{font-size:46px}.hero-photo{height:380px}.hero-copy{font-size:15px}.quick-stats div{flex:1;min-width:30%}.quick-stats b{font-size:18px}.quick-stats span{font-size:8px}.feature-grid,.grid,.results-grid,.certificate-grid,.photo-grid{grid-template-columns:1fr}.feature-card{min-height:125px}.page-hero{padding:55px 0 35px}section{padding:58px 0}.photo-card img{height:auto}.certificate-card img{height:auto}.slide-btn{width:34px;height:45px;font-size:23px}.floating-whatsapp{right:14px;bottom:14px;padding:12px 14px}.floating-whatsapp span{font-size:12px}}
+
+/* ===== Menu principal: hambúrguer em todas as telas ===== */
+.site-header .nav-wrap{position:relative}
+.menu-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;width:46px;height:46px;border:1px solid var(--line);border-radius:9px;background:#121216;gap:4px;padding:0;order:2}
+.menu-toggle i{display:block;width:24px;height:3px;background:#fff;margin:0;border-radius:3px}
+.desktop-nav{display:none!important}
+@media(max-width:650px){
+  .menu-toggle{width:42px;height:42px}
+  .brand{font-size:13px}
+}
+/* ===== Certificados: IAT sem estourar no celular ===== */
+.certificate-card img{height:360px;max-width:100%;object-fit:contain;padding:0}
+.featured-cert img{height:360px!important}
+@media(max-width:650px){
+  .certificate-card img,.featured-cert img{height:auto!important;max-height:430px;object-fit:contain;padding:0;background:#f4f4f4}
+}
+/* ===== Material/PDF: usa iframe nativo confiável como fallback ===== */
+.pdf-fallback{width:100%;height:min(75vh,760px);border:0;background:#fff;display:block}
+@media(max-width:650px){.pdf-fallback{height:65vh;min-height:500px}}
