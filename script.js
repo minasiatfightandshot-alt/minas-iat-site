@@ -1,100 +1,17 @@
-document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const el=document.querySelector(a.getAttribute('href'));if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}}));
-
 (() => {
-  const docs = {
-    linade: { count: 20, file: 'assets/Linade_2026_Guia_Tecnico_do_Instrutor.pdf' },
-    w2c: { count: 10, file: 'assets/W2C_Games_Guia_de_Aplicacao_para_Instrutores.pdf' }
-  };
-  const state = { linade:{page:1,pdf:null}, w2c:{page:1,pdf:null} };
-  let activeDoc='linade';
-
-  async function setup(key){
-    const track=document.getElementById(key+'-track');
-    const counter=document.getElementById(key+'-counter');
-    if(!track||!counter) return;
-    track.innerHTML='<div class="pdf-canvas-wrap"><canvas class="pdf-page-canvas"></canvas></div>';
-    try{
-      if(!window.pdfjsLib){ throw new Error('PDF.js não carregado'); }
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      state[key].pdf=await window.pdfjsLib.getDocument(docs[key].file).promise;
-      docs[key].count=state[key].pdf.numPages;
-      await render(key);
-    }catch(err){
-      track.innerHTML='<div style="padding:40px;text-align:center;color:#555;background:#fff;width:100%;">Não foi possível carregar este guia. Use “Abrir PDF original”.</div>';
-      counter.textContent='PDF';
-      console.error(err);
-    }
-  }
-
-  async function render(key){
-    const s=state[key], track=document.getElementById(key+'-track'), counter=document.getElementById(key+'-counter');
-    if(!s.pdf) return;
-    const page=await s.pdf.getPage(s.page);
-    const wrap=track.querySelector('.pdf-canvas-wrap');
-    const canvas=wrap.querySelector('canvas');
-    const base=page.getViewport({scale:1});
-    const scale=Math.max(1, Math.min(2.2, wrap.clientWidth/base.width));
-    const viewport=page.getViewport({scale});
-    const ratio=window.devicePixelRatio||1;
-    canvas.width=Math.floor(viewport.width*ratio);
-    canvas.height=Math.floor(viewport.height*ratio);
-    canvas.style.width='100%';
-    canvas.style.height='auto';
-    wrap.style.aspectRatio=base.width+'/'+base.height;
-    const ctx=canvas.getContext('2d');
-    await page.render({canvasContext:ctx,viewport,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;
-    counter.textContent=s.page+' / '+s.pdf.numPages;
-  }
-
-  async function change(key,delta){
-    const s=state[key];
-    if(!s.pdf) return;
-    s.page=Math.max(1,Math.min(s.pdf.numPages,s.page+delta));
-    await render(key);
-  }
-
-  document.querySelectorAll('.slide-prev').forEach(b=>b.addEventListener('click',()=>change(b.dataset.target,-1)));
-  document.querySelectorAll('.slide-next').forEach(b=>b.addEventListener('click',()=>change(b.dataset.target,1)));
-
-  document.querySelectorAll('.doc-switch').forEach(b=>b.addEventListener('click',()=>{
-    activeDoc=b.dataset.doc;
-    document.querySelectorAll('.doc-panel').forEach(p=>p.classList.toggle('is-active',p.dataset.doc===activeDoc));
-    document.querySelectorAll('.doc-switch').forEach(x=>x.classList.toggle('is-active',x.dataset.doc===activeDoc));
-    setTimeout(()=>render(activeDoc),50);
-  }));
-
-  document.querySelectorAll('.doc-viewer').forEach(viewer=>{
-    let startX=null;
-    viewer.addEventListener('touchstart',e=>startX=e.changedTouches[0].clientX,{passive:true});
-    viewer.addEventListener('touchend',e=>{
-      if(startX===null) return;
-      const dx=e.changedTouches[0].clientX-startX;
-      if(Math.abs(dx)>45) change(activeDoc,dx<0?1:-1);
-      startX=null;
-    },{passive:true});
-  });
-
-  window.addEventListener('resize',()=>render(activeDoc));
-  setup('linade'); setup('w2c');
+const toggle=document.querySelector('.menu-toggle'),drawer=document.querySelector('.drawer'),back=document.querySelector('.drawer-backdrop'),close=document.querySelector('.menu-close');
+function openMenu(){drawer?.classList.add('open');back?.classList.add('open');toggle?.setAttribute('aria-expanded','true');drawer?.setAttribute('aria-hidden','false')}
+function closeMenu(){drawer?.classList.remove('open');back?.classList.remove('open');toggle?.setAttribute('aria-expanded','false');drawer?.setAttribute('aria-hidden','true')}
+toggle?.addEventListener('click',openMenu);close?.addEventListener('click',closeMenu);back?.addEventListener('click',closeMenu);drawer?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
 })();
-
-/* ===== Formulário de contato -> WhatsApp ===== */
 (() => {
-  const form = document.getElementById('lead-form');
-  if (!form) return;
-  const phone = '5531997915642';
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const name = document.getElementById('lead-name').value.trim();
-    const leadPhone = document.getElementById('lead-phone').value.trim();
-    const interest = document.getElementById('lead-interest').value;
-    const message = document.getElementById('lead-message').value.trim() || 'Gostaria de receber mais informações.';
-    const text =
-      'Olá, Fernando! Vim pelo site Minas IAT Fight & Shot.\n\n' +
-      'Nome: ' + name + '\n' +
-      'Meu WhatsApp: ' + leadPhone + '\n' +
-      'Interesse: ' + interest + '\n' +
-      'Mensagem: ' + message;
-    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
-  });
+const form=document.getElementById('lead-form'); if(!form)return; const phone='5531997915642';
+form.addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('lead-name').value.trim(),leadPhone=document.getElementById('lead-phone').value.trim(),interest=document.getElementById('lead-interest').value,message=document.getElementById('lead-message').value.trim()||'Gostaria de receber mais informações.';const text='Olá, Fernando! Vim pelo site Minas IAT Fight & Shot.\n\nNome: '+name+'\nMeu WhatsApp: '+leadPhone+'\nInteresse: '+interest+'\nMensagem: '+message;window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener');});
+})();
+(() => {
+const docs={linade:{file:'assets/Linade_2026_Guia_Tecnico_do_Instrutor.pdf'},w2c:{file:'assets/W2C_Games_Guia_de_Aplicacao_para_Instrutores.pdf'}},state={linade:{page:1,pdf:null},w2c:{page:1,pdf:null}};
+async function setup(key){const track=document.getElementById(key+'-track'),counter=document.getElementById(key+'-counter');if(!track||!counter||!window.pdfjsLib)return;try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';state[key].pdf=await pdfjsLib.getDocument(docs[key].file).promise;await render(key)}catch(e){track.innerHTML='<div style="padding:35px;background:#fff;color:#555;text-align:center">Use o botão “Abrir PDF original”.</div>';counter.textContent='PDF';}}
+async function render(key){const s=state[key],track=document.getElementById(key+'-track'),counter=document.getElementById(key+'-counter');if(!s.pdf)return;const p=await s.pdf.getPage(s.page),wrap=track.querySelector('.pdf-canvas-wrap'),canvas=wrap.querySelector('canvas'),base=p.getViewport({scale:1}),scale=Math.max(1,Math.min(2.2,wrap.clientWidth/base.width)),vp=p.getViewport({scale}),ratio=devicePixelRatio||1;canvas.width=vp.width*ratio;canvas.height=vp.height*ratio;const ctx=canvas.getContext('2d');await p.render({canvasContext:ctx,viewport:vp,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;counter.textContent=s.page+' / '+s.pdf.numPages}
+function change(key,d){const s=state[key];if(!s.pdf)return;s.page=Math.max(1,Math.min(s.pdf.numPages,s.page+d));render(key)}
+document.querySelectorAll('.slide-prev').forEach(b=>b.onclick=()=>change(b.dataset.target,-1));document.querySelectorAll('.slide-next').forEach(b=>b.onclick=()=>change(b.dataset.target,1));document.querySelectorAll('.doc-switch').forEach(b=>b.onclick=()=>{document.querySelectorAll('.doc-panel').forEach(p=>p.classList.toggle('is-active',p.dataset.doc===b.dataset.doc));document.querySelectorAll('.doc-switch').forEach(x=>x.classList.toggle('is-active',x.dataset.doc===b.dataset.doc));setTimeout(()=>render(b.dataset.doc),50)});setup('linade');setup('w2c');
 })();
