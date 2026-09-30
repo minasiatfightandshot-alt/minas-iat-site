@@ -77,3 +77,24 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',
   window.addEventListener('resize',()=>render(activeDoc));
   setup('linade'); setup('w2c');
 })();
+
+/* ===== Formulário de contato -> WhatsApp ===== */
+(() => {
+  const form = document.getElementById('lead-form');
+  if (!form) return;
+  const phone = '5531997915642';
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = document.getElementById('lead-name').value.trim();
+    const leadPhone = document.getElementById('lead-phone').value.trim();
+    const interest = document.getElementById('lead-interest').value;
+    const message = document.getElementById('lead-message').value.trim() || 'Gostaria de receber mais informações.';
+    const text =
+      'Olá, Fernando! Vim pelo site Minas IAT Fight & Shot.\n\n' +
+      'Nome: ' + name + '\n' +
+      'Meu WhatsApp: ' + leadPhone + '\n' +
+      'Interesse: ' + interest + '\n' +
+      'Mensagem: ' + message;
+    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  });
+})();
