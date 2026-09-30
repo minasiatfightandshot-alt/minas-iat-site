@@ -1,17 +1,58 @@
 (() => {
-const toggle=document.querySelector('.menu-toggle'),drawer=document.querySelector('.drawer'),back=document.querySelector('.drawer-backdrop'),close=document.querySelector('.menu-close');
-function openMenu(){drawer?.classList.add('open');back?.classList.add('open');toggle?.setAttribute('aria-expanded','true');drawer?.setAttribute('aria-hidden','false')}
-function closeMenu(){drawer?.classList.remove('open');back?.classList.remove('open');toggle?.setAttribute('aria-expanded','false');drawer?.setAttribute('aria-hidden','true')}
-toggle?.addEventListener('click',openMenu);close?.addEventListener('click',closeMenu);back?.addEventListener('click',closeMenu);drawer?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+  const toggle = document.querySelector('.menu-toggle');
+  const drawer = document.querySelector('.drawer');
+  const back = document.querySelector('.drawer-backdrop');
+  const close = document.querySelector('.menu-close');
+  const setOpen = (open) => {
+    drawer?.classList.toggle('open', open);
+    back?.classList.toggle('open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    drawer?.setAttribute('aria-hidden', String(!open));
+  };
+  toggle?.addEventListener('click', () => setOpen(true));
+  close?.addEventListener('click', () => setOpen(false));
+  back?.addEventListener('click', () => setOpen(false));
+  drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
 })();
+
 (() => {
-const form=document.getElementById('lead-form'); if(!form)return; const phone='5531997915642';
-form.addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('lead-name').value.trim(),leadPhone=document.getElementById('lead-phone').value.trim(),interest=document.getElementById('lead-interest').value,message=document.getElementById('lead-message').value.trim()||'Gostaria de receber mais informações.';const text='Olá, Fernando! Vim pelo site Minas IAT Fight & Shot.\n\nNome: '+name+'\nMeu WhatsApp: '+leadPhone+'\nInteresse: '+interest+'\nMensagem: '+message;window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank','noopener');});
+  const form = document.getElementById('lead-form');
+  if (!form) return;
+  const phone = '5531997915642';
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('lead-name').value.trim();
+    const leadPhone = document.getElementById('lead-phone').value.trim();
+    const interest = document.getElementById('lead-interest').value;
+    const message = document.getElementById('lead-message').value.trim() || 'Gostaria de receber mais informações.';
+    const text = 'Olá, Fernando! Vim pelo site Minas IAT Fight & Shot.\n\n' +
+      'Nome: ' + name + '\nMeu WhatsApp: ' + leadPhone +
+      '\nInteresse: ' + interest + '\nMensagem: ' + message;
+    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  });
 })();
+
 (() => {
-const docs={linade:{file:'assets/Linade_2026_Guia_Tecnico_do_Instrutor.pdf'},w2c:{file:'assets/W2C_Games_Guia_de_Aplicacao_para_Instrutores.pdf'}},state={linade:{page:1,pdf:null},w2c:{page:1,pdf:null}};
-async function setup(key){const track=document.getElementById(key+'-track'),counter=document.getElementById(key+'-counter');if(!track||!counter||!window.pdfjsLib)return;try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';state[key].pdf=await pdfjsLib.getDocument(docs[key].file).promise;await render(key)}catch(e){track.innerHTML='<div style="padding:35px;background:#fff;color:#555;text-align:center">Use o botão “Abrir PDF original”.</div>';counter.textContent='PDF';}}
-async function render(key){const s=state[key],track=document.getElementById(key+'-track'),counter=document.getElementById(key+'-counter');if(!s.pdf)return;const p=await s.pdf.getPage(s.page),wrap=track.querySelector('.pdf-canvas-wrap'),canvas=wrap.querySelector('canvas'),base=p.getViewport({scale:1}),scale=Math.max(1,Math.min(2.2,wrap.clientWidth/base.width)),vp=p.getViewport({scale}),ratio=devicePixelRatio||1;canvas.width=vp.width*ratio;canvas.height=vp.height*ratio;const ctx=canvas.getContext('2d');await p.render({canvasContext:ctx,viewport:vp,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;counter.textContent=s.page+' / '+s.pdf.numPages}
-function change(key,d){const s=state[key];if(!s.pdf)return;s.page=Math.max(1,Math.min(s.pdf.numPages,s.page+d));render(key)}
-document.querySelectorAll('.slide-prev').forEach(b=>b.onclick=()=>change(b.dataset.target,-1));document.querySelectorAll('.slide-next').forEach(b=>b.onclick=()=>change(b.dataset.target,1));document.querySelectorAll('.doc-switch').forEach(b=>b.onclick=()=>{document.querySelectorAll('.doc-panel').forEach(p=>p.classList.toggle('is-active',p.dataset.doc===b.dataset.doc));document.querySelectorAll('.doc-switch').forEach(x=>x.classList.toggle('is-active',x.dataset.doc===b.dataset.doc));setTimeout(()=>render(b.dataset.doc),50)});setup('linade');setup('w2c');
+  const panels = [
+    {key:'linade', file:'assets/Linade_2026_Guia_Tecnico_do_Instrutor.pdf'},
+    {key:'w2c', file:'assets/W2C_Games_Guia_de_Aplicacao_para_Instrutores.pdf'}
+  ];
+  panels.forEach(({key,file}) => {
+    const panel = document.querySelector('.doc-panel[data-doc="'+key+'"]');
+    if (!panel) return;
+    const viewer = panel.querySelector('.doc-viewer');
+    const native = document.createElement('iframe');
+    native.className='pdf-fallback';
+    native.src=file+'#toolbar=1&navpanes=0&view=FitH';
+    native.title=key==='linade'?'Guia Técnico do Instrutor LINADE 2026':'Guia de Aplicação para Instrutores W2C GAMES 2026';
+    viewer.innerHTML='';
+    viewer.appendChild(native);
+  });
+  document.querySelectorAll('.doc-switch').forEach(btn => btn.addEventListener('click', () => {
+    const target = btn.dataset.doc;
+    document.querySelectorAll('.doc-panel').forEach(p => p.style.display = p.dataset.doc===target ? 'block' : 'none');
+    document.querySelectorAll('.doc-switch').forEach(b => b.classList.toggle('is-active', b===btn));
+  }));
+  const first = document.querySelector('.doc-panel[data-doc="linade"]');
+  if (first) document.querySelectorAll('.doc-panel').forEach(p => p.style.display = p===first ? 'block' : 'none');
 })();
